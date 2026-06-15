@@ -32,40 +32,101 @@
   <link rel="stylesheet" href="/styles.css" />
   <style>
     /* orb-only 模式：URL 参数 ?mode=orb 或从桌面 PWA 启动时，只显示浮球 */
-    /* 关键：用 CSS 选择器检测 data-mode 属性，不依赖外部 JS 加载 */
     html[data-orb="1"] body {
-      background: #0a001f !important;
+      background: radial-gradient(circle at 50% 120%, #1a003a 0%, #0a001f 55%, #030014 100%) !important;
       overflow: hidden !important;
+      min-height: 100vh;
     }
+
     html[data-orb="1"] .aurora-bg,
     html[data-orb="1"] .grid-bg,
     html[data-orb="1"] .app-shell,
     html[data-orb="1"] .install-card {
       display: none !important;
     }
-    html[data-orb="1"] .orb-widget,
-    body[data-mode="orb"] .orb-widget {
-      width: 74px;
-      height: 74px;
+
+    /* orb-only 模式的浮球：更大、更强光 */
+    html[data-orb="1"] .orb-widget {
+      width: 120px;
+      height: 120px;
+      top: 50% !important;
+      left: 50% !important;
+      right: auto !important;
+      bottom: auto !important;
+      transform: translate(-50%, -50%) !important;
+      cursor: pointer;
     }
-    html[data-orb="1"] .orb-core,
-    body[data-mode="orb"] .orb-core {
-      width: 74px;
-      height: 74px;
+    html[data-orb="1"] .orb-core {
+      width: 120px;
+      height: 120px;
       box-shadow:
-        0 0 30px rgba(255, 0, 110, 0.7),
-        0 0 60px rgba(131, 56, 236, 0.5),
-        0 0 0 2px rgba(255, 255, 255, 0.15) inset;
-      animation: orbInPulse 1.8s ease-in-out infinite;
+        0 0 50px rgba(255, 0, 110, 0.8),
+        0 0 100px rgba(131, 56, 236, 0.6),
+        0 0 0 3px rgba(255, 255, 255, 0.15) inset;
+      animation: orbInPulse 2s ease-in-out infinite;
     }
-    html[data-orb="1"] .orb-core::after,
-    body[data-mode="orb"] .orb-core::after {
-      width: 74px;
-      height: 74px;
+    html[data-orb="1"] .orb-core::after {
+      width: 120px;
+      height: 120px;
     }
     @keyframes orbInPulse {
       0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
-      50% { transform: scale(1.1); filter: hue-rotate(40deg) brightness(1.15); }
+      50% { transform: scale(1.08); filter: hue-rotate(40deg) brightness(1.15); }
+    }
+
+    /* orb-only 模式：顶部品牌标识 */
+    html[data-orb="1"]::after {
+      content: "ORB · OS";
+      position: fixed;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      letter-spacing: 6px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.45);
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* orb-only 模式：底部操作提示 */
+    html[data-orb="1"] body::after {
+      content: "点击浮球 → 打开应用";
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.55);
+      pointer-events: none;
+      letter-spacing: 2px;
+      animation: orbHintFade 3s ease-in-out infinite;
+      z-index: 9998;
+    }
+    @keyframes orbHintFade {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+
+    /* orb-only 模式：中央浮动的装饰光点 */
+    html[data-orb="1"] body::before {
+      content: "";
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: #00f5d4;
+      border-radius: 50%;
+      top: 25%;
+      left: 15%;
+      box-shadow: 0 0 20px #00f5d4, 70vw 30vh 0 -2px #ff006e, 20vw 55vh 0 -3px #8338ec, -10vw -25vh 0 -2px #06ffa5;
+      filter: blur(1px);
+      animation: orbDotsFloat 8s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes orbDotsFloat {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+      50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
     }
   </style>
   <script>

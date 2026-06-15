@@ -148,16 +148,23 @@
       openPanel();
       return;
     }
-    // Fling toward nearest edge then snap
+    const isOrbMode = document.body.classList.contains('orb-only');
     const vw = getVwPx();
     const vh = getVhPx();
     const w = orb.offsetWidth || state.orbW;
     const h = orb.offsetHeight || state.orbH;
+
+    if (isOrbMode) {
+      // orb-only 模式：松手后吸附回中央
+      setOrbPosition(vw / 2 - w / 2, vh / 2 - h / 2, true);
+      return;
+    }
+
+    // 普通模式：Fling toward nearest edge then snap
     let targetX = state.currentX;
     let targetY = state.currentY;
     const speed = Math.hypot(state.vx, state.vy);
     if (speed > 2) {
-      // predict based on fling
       const steps = Math.min(18, Math.round(speed * 0.6));
       targetX = state.currentX + state.vx * steps;
       targetY = state.currentY + state.vy * steps;
@@ -367,27 +374,7 @@
 
   // ===== Initialize =====
   function init() {
-    const vw = getVwPx();
-    const vh = getVhPx();
-    const w = orb.offsetWidth || state.orbW;
-    const h = orb.offsetHeight || state.orbH;
-    orb.style.left = (vw - w + w * 0.6) + 'px';
-    orb.style.top = (vh * 0.55) + 'px';
-    orb.style.right = 'auto';
-    orb.style.bottom = 'auto';
-    state.currentX = parseFloat(orb.style.left);
-    state.currentY = parseFloat(orb.style.top);
-    state.side = 'right';
-    spawnPanelParticles();
-
-    // URL 参数：?panel=1 自动打开面板
-    if (location.search.includes('panel=1')) {
-      setTimeout(openPanel, 350);
-    }
-
-    // PWA / 浮球纯净模式检测
-    // ?mode=orb 或 display-mode: standalone（从桌面启动）
-    // 隐藏主页面，只保留浮球挂件和面板
+    // orb-only 模式检测（从桌面 PWA 启动 或 URL 带 ?mode=orb）
     const isOrbMode =
       location.search.includes('mode=orb') ||
       window.matchMedia('(display-mode: standalone)').matches ||
@@ -396,7 +383,38 @@
     if (isOrbMode) {
       document.body.classList.add('orb-only');
       if (statusText) statusText.textContent = '浮球模式';
-      toast('💫 点击浮球召唤炫彩面板');
+    }
+
+    const vw = getVwPx();
+    const vh = getVhPx();
+    const w = orb.offsetWidth || state.orbW;
+    const h = orb.offsetHeight || state.orbH;
+
+    if (isOrbMode) {
+      // orb-only 模式：浮球居中，不吸附到边缘
+      orb.style.left = (vw / 2 - w / 2) + 'px';
+      orb.style.top = (vh / 2 - h / 2) + 'px';
+      orb.style.right = 'auto';
+      orb.style.bottom = 'auto';
+      state.currentX = parseFloat(orb.style.left);
+      state.currentY = parseFloat(orb.style.top);
+      state.side = 'center';
+    } else {
+      // 普通模式：吸附到右侧边缘
+      orb.style.left = (vw - w + w * 0.6) + 'px';
+      orb.style.top = (vh * 0.55) + 'px';
+      orb.style.right = 'auto';
+      orb.style.bottom = 'auto';
+      state.currentX = parseFloat(orb.style.left);
+      state.currentY = parseFloat(orb.style.top);
+      state.side = 'right';
+    }
+
+    spawnPanelParticles();
+
+    // URL 参数：?panel=1 自动打开面板
+    if (location.search.includes('panel=1')) {
+      setTimeout(openPanel, 350);
     }
   }
 
