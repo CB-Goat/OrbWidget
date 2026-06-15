@@ -130,15 +130,28 @@
     }
   </style>
   <script>
-    // 立即检测是否进入 orb-only 模式（不等待 DOMContentLoaded）
+    // 立即检测是否进入 orb-only 模式
+    // 只要是从桌面启动（PWA standalone 模式），就进入浮球纯净模式
     (function() {
-      var url = window.location.href;
-      var isOrb = url.indexOf('mode=orb') > -1
-        || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
-        || (window.navigator && window.navigator.standalone === true);
+      var isOrb = false;
+      // 检测1：display-mode: standalone（从桌面图标启动的 PWA）
+      if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+        isOrb = true;
+      }
+      // 检测2：iOS Safari 从桌面启动
+      if (window.navigator && window.navigator.standalone === true) {
+        isOrb = true;
+      }
+      // 检测3：URL 参数 mode=orb
+      if (window.location.href.indexOf('mode=orb') > -1) {
+        isOrb = true;
+      }
+      // 检测4：从 Android 应用方式启动
+      if (document.referrer && document.referrer.includes('android-app://')) {
+        isOrb = true;
+      }
       if (isOrb) {
         document.documentElement.setAttribute('data-orb', '1');
-        // body 还没解析完，先在 html 上做标记，下面脚本再补 body 标记
       }
     })();
   </script>
@@ -146,10 +159,21 @@
 <body>
   <script>
     // body 可用后立即应用标记
+    // 只要是从桌面启动（PWA standalone 模式），就进入浮球纯净模式
     (function() {
-      var isOrb = window.location.href.indexOf('mode=orb') > -1
-        || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
-        || (window.navigator && window.navigator.standalone === true);
+      var isOrb = false;
+      if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+        isOrb = true;
+      }
+      if (window.navigator && window.navigator.standalone === true) {
+        isOrb = true;
+      }
+      if (window.location.href.indexOf('mode=orb') > -1) {
+        isOrb = true;
+      }
+      if (document.referrer && document.referrer.includes('android-app://')) {
+        isOrb = true;
+      }
       if (isOrb) {
         document.body.setAttribute('data-mode', 'orb');
         document.body.classList.add('orb-only');
