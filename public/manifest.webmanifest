@@ -2,7 +2,7 @@
   "name": "炫彩浮球挂件",
   "short_name": "OrbWidget",
   "description": "一个炫彩的手机浮球挂件 Web App，可悬浮在屏幕边缘，点击展开炫彩应用面板。",
-  "start_url": "/?utm_source=pwa",
+  "start_url": "/?mode=orb",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
@@ -36,7 +36,7 @@
       "name": "召唤炫彩面板",
       "short_name": "炫彩面板",
       "description": "直接打开炫彩应用面板",
-      "url": "/?panel=1",
+      "url": "/?mode=orb&panel=1",
       "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
     }
   ],

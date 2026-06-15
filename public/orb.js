@@ -385,15 +385,18 @@
       setTimeout(openPanel, 350);
     }
 
-    // PWA standalone 模式检测
-    const isStandalone =
+    // PWA / 浮球纯净模式检测
+    // ?mode=orb 或 display-mode: standalone（从桌面启动）
+    // 隐藏主页面，只保留浮球挂件和面板
+    const isOrbMode =
+      location.search.includes('mode=orb') ||
       window.matchMedia('(display-mode: standalone)').matches ||
       window.navigator.standalone === true ||
       document.referrer.includes('android-app://');
-    if (isStandalone) {
-      document.body.classList.add('pwa-mode');
-      statusText.textContent = '已安装';
-      toast('✨ 已作为独立 App 启动');
+    if (isOrbMode) {
+      document.body.classList.add('orb-only');
+      if (statusText) statusText.textContent = '浮球模式';
+      toast('💫 点击浮球召唤炫彩面板');
     }
   }
 
@@ -460,10 +463,10 @@
   // display-mode 切换监听
   window.matchMedia('(display-mode: standalone)').addEventListener?.('change', (e) => {
     if (e.matches) {
-      document.body.classList.add('pwa-mode');
-      if (statusText) statusText.textContent = '已安装';
+      document.body.classList.add('orb-only');
+      if (statusText) statusText.textContent = '浮球模式';
     } else {
-      document.body.classList.remove('pwa-mode');
+      document.body.classList.remove('orb-only');
     }
   });
 
@@ -499,7 +502,7 @@
       });
       if (res.ok) {
         const data = await res.json();
-        if (data && data.hint && statusText && !document.body.classList.contains('pwa-mode')) {
+        if (data && data.hint && statusText && !document.body.classList.contains('orb-only')) {
           statusText.textContent = data.isMobile ? '移动端' : '桌面模式';
         }
       }
