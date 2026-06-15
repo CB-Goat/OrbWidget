@@ -148,19 +148,12 @@
       openPanel();
       return;
     }
-    const isOrbMode = document.body.classList.contains('orb-only');
+    // 始终使用边缘吸附
     const vw = getVwPx();
     const vh = getVhPx();
     const w = orb.offsetWidth || state.orbW;
     const h = orb.offsetHeight || state.orbH;
 
-    if (isOrbMode) {
-      // orb-only 模式：松手后吸附回中央
-      setOrbPosition(vw / 2 - w / 2, vh / 2 - h / 2, true);
-      return;
-    }
-
-    // 普通模式：Fling toward nearest edge then snap
     let targetX = state.currentX;
     let targetY = state.currentY;
     const speed = Math.hypot(state.vx, state.vy);
@@ -374,42 +367,18 @@
 
   // ===== Initialize =====
   function init() {
-    // orb-only 模式检测（从桌面 PWA 启动 或 URL 带 ?mode=orb）
-    const isOrbMode =
-      location.search.includes('mode=orb') ||
-      window.matchMedia('(display-mode: standalone)').matches ||
-      window.navigator.standalone === true ||
-      document.referrer.includes('android-app://');
-    if (isOrbMode) {
-      document.body.classList.add('orb-only');
-      if (statusText) statusText.textContent = '浮球模式';
-    }
-
+    // 始终使用普通模式：浮球吸附到右侧边缘
     const vw = getVwPx();
     const vh = getVhPx();
     const w = orb.offsetWidth || state.orbW;
     const h = orb.offsetHeight || state.orbH;
-
-    if (isOrbMode) {
-      // orb-only 模式：浮球居中，不吸附到边缘
-      orb.style.left = (vw / 2 - w / 2) + 'px';
-      orb.style.top = (vh / 2 - h / 2) + 'px';
-      orb.style.right = 'auto';
-      orb.style.bottom = 'auto';
-      state.currentX = parseFloat(orb.style.left);
-      state.currentY = parseFloat(orb.style.top);
-      state.side = 'center';
-    } else {
-      // 普通模式：吸附到右侧边缘
-      orb.style.left = (vw - w + w * 0.6) + 'px';
-      orb.style.top = (vh * 0.55) + 'px';
-      orb.style.right = 'auto';
-      orb.style.bottom = 'auto';
-      state.currentX = parseFloat(orb.style.left);
-      state.currentY = parseFloat(orb.style.top);
-      state.side = 'right';
-    }
-
+    orb.style.left = (vw - w + w * 0.6) + 'px';
+    orb.style.top = (vh * 0.55) + 'px';
+    orb.style.right = 'auto';
+    orb.style.bottom = 'auto';
+    state.currentX = parseFloat(orb.style.left);
+    state.currentY = parseFloat(orb.style.top);
+    state.side = 'right';
     spawnPanelParticles();
 
     // URL 参数：?panel=1 自动打开面板

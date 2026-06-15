@@ -3,7 +3,7 @@
  * 离线缓存 + 应用安装支持 + 后台同步
  * ========================================================== */
 
-const CACHE_VERSION = 'orb-v1.0.0';
+const CACHE_VERSION = 'orb-v1.1.0';
 const STATIC_CACHE = `orb-static-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `orb-runtime-${CACHE_VERSION}`;
 
