@@ -484,18 +484,23 @@
   if (pwaInstallBtn) {
     pwaInstallBtn.addEventListener('click', async () => {
       if (!deferredPrompt) {
-        // 兜底：浏览器不支持时提示手动方式
-        if (navigator.standalone !== undefined) {
-          toast('📱 Safari: 点击下方"分享"按钮 → "添加到主屏幕"');
-        } else {
-          toast('💡 请用 Chrome 浏览器访问，体验一键安装');
-        }
+        // 兜底：浏览器不支持时显示详细安装指南
+        toast('📱 手动安装步骤：');
+        setTimeout(() => toast('1️⃣ 点击浏览器右上角三点菜单'), 800);
+        setTimeout(() => toast('2️⃣ 选择"添加到主屏幕"'), 1600);
+        setTimeout(() => toast('3️⃣ 点击"添加"完成安装'), 2400);
         return;
       }
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === 'accepted') {
         toast('🎉 已安装完成！从桌面图标打开体验浮球模式');
+      } else {
+        // 用户取消后显示手动安装指南
+        setTimeout(() => {
+          toast('💡 也可以手动添加：');
+          setTimeout(() => toast('菜单 → 添加到主屏幕'), 800);
+        }, 500);
       }
       deferredPrompt = null;
       if (pwaInstallBanner) pwaInstallBanner.style.display = 'none';
