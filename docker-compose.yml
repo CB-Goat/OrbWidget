@@ -1,0 +1,29 @@
+# ===== 浮球挂件 PWA 部署配置 ===== #
+# 用法：docker compose up -d
+# 或配合已有 docker-compose 使用：将其内容合并到主 docker-compose.yml
+
+services:
+  orb-widget:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: orb-widget
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    networks:
+      - orb-network
+
+networks:
+  orb-network:
+    external: true
+    # 如果没有外部网络，改用以下方式创建（删除 external: true）：
+    # name: orb-network
+    # driver: bridge

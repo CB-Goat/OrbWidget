@@ -1,0 +1,15 @@
+# 加速构建、减小镜像体积
+node_modules/
+.git/
+.gitignore
+README.md
+*.log
+npm-debug.log*
+.env
+.env.*
+*.md
+coverage/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

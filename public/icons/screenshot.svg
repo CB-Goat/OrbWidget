@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1334" width="750" height="1334">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#1a0042"/>
+      <stop offset="60%" stop-color="#0a001f"/>
+      <stop offset="100%" stop-color="#000"/>
+    </radialGradient>
+    <conicGradient id="o" from="225deg" at="50% 50%">
+      <stop offset="0%" stop-color="#ff006e"/>
+      <stop offset="30%" stop-color="#8338ec"/>
+      <stop offset="60%" stop-color="#3a86ff"/>
+      <stop offset="100%" stop-color="#06ffa5"/>
+    </conicGradient>
+  </defs>
+  <rect width="750" height="1334" fill="url(#g)"/>
+  <circle cx="375" cy="667" r="260" fill="url(#o)" opacity="0.55" filter="blur(30px)"/>
+  <circle cx="375" cy="667" r="150" fill="url(#o)"/>
+  <circle cx="375" cy="667" r="90" fill="#fff"/>
+  <text x="375" y="950" text-anchor="middle" font-family="sans-serif" font-size="34" font-weight="bold" fill="#fff">炫彩浮球挂件</text>
+  <text x="375" y="1000" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#b9a8e0">Floating Orb Widget · PWA</text>
+</svg>

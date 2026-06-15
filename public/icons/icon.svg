@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="75%">
+      <stop offset="0%" stop-color="#1a0042"/>
+      <stop offset="55%" stop-color="#0a001f"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    <conicGradient id="orb" from="225deg" at="50% 50%">
+      <stop offset="0%" stop-color="#ff006e"/>
+      <stop offset="25%" stop-color="#8338ec"/>
+      <stop offset="50%" stop-color="#3a86ff"/>
+      <stop offset="75%" stop-color="#06ffa5"/>
+      <stop offset="100%" stop-color="#ff006e"/>
+    </conicGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff006e" stop-opacity="0.6"/>
+      <stop offset="35%" stop-color="#8338ec" stop-opacity="0.35"/>
+      <stop offset="65%" stop-color="#3a86ff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <radialGradient id="core" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="30%" stop-color="#ffffff" stop-opacity="0.85"/>
+      <stop offset="70%" stop-color="#ffbe0b" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="210" fill="url(#halo)"/>
+  <circle cx="256" cy="256" r="140" fill="url(#orb)"/>
+  <circle cx="256" cy="256" r="140" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="3"/>
+  <circle cx="256" cy="256" r="86" fill="url(#core)"/>
+  <g stroke="white" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.9">
+    <circle cx="256" cy="256" r="18"/>
+    <line x1="256" y1="210" x2="256" y2="226"/>
+    <line x1="256" y1="286" x2="256" y2="302"/>
+    <line x1="210" y1="256" x2="226" y2="256"/>
+    <line x1="286" y1="256" x2="302" y2="256"/>
+  </g>
+</svg>

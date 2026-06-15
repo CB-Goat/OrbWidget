@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a001f" />
+  <meta name="color-scheme" content="dark" />
+
+  <!-- iOS / Safari PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="OrbWidget" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512.png" />
+
+  <!-- Windows / Android -->
+  <meta name="msapplication-TileColor" content="#0a001f" />
+  <meta name="msapplication-TileImage" content="/icons/icon-192.png" />
+  <meta name="application-name" content="炫彩浮球挂件" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+
+  <title>炫彩浮球挂件 · OrbWidget</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="aurora-bg"></div>
+  <div class="grid-bg"></div>
+
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="logo-mark">
+        <span class="logo-dot"></span>
+        <span class="logo-text">ORB<span>·</span>OS</span>
+      </div>
+      <div class="status-chip">
+        <span class="pulse-dot"></span>
+        <span id="statusText">在线</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-tag">MOBILE FLOATING WIDGET v1.0</div>
+      <h1 class="hero-title">
+        <span class="title-line">你的手机，</span>
+        <span class="title-line">此刻更<span class="neon">炫彩</span>.</span>
+      </h1>
+      <p class="hero-sub">
+        拖动右侧的浮球 → 丢到屏幕边缘自动吸附隐藏 → 点击即可召唤<span class="accent"> 炫彩应用面板</span>。
+      </p>
+    </section>
+
+    <!-- PWA 安装提示卡片（可关闭，安装后自动隐藏） -->
+    <section class="install-card" id="installCard" hidden>
+      <div class="install-icon">📲</div>
+      <div class="install-text">
+        <strong>添加到主屏幕</strong>
+        <span>作为独立 App 使用，离线也能打开浮球</span>
+      </div>
+      <button class="install-btn" id="installBtn">安装</button>
+      <button class="install-close" id="installClose" aria-label="关闭">✕</button>
+    </section>
+
+    <section class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon" data-emoji="✦"></div>
+        <h3>浮动挂件</h3>
+        <p>常驻屏幕边缘，随用随点，不干扰浏览。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" data-emoji="◆"></div>
+        <h3>磁吸吸附</h3>
+        <p>松手后自动吸附到最近的屏幕侧边，可半隐藏。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" data-emoji="✺"></div>
+        <h3>炫彩面板</h3>
+        <p>展开后呈现流光粒子与霓虹渐变，赛博朋克体验拉满。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" data-emoji="◈"></div>
+        <h3>可安装为 App</h3>
+        <p>PWA 支持，添加到主屏幕，离线可用，像原生 App 启动。</p>
+      </div>
+    </section>
+
+    <section class="cta">
+      <button class="cta-btn" id="summonBtn">
+        <span>召唤炫彩面板</span>
+        <em>→</em>
+      </button>
+      <div class="hint">💡 提示：尝试把浮球拖到屏幕左/右/底部边缘，它会自动吸附。</div>
+    </section>
+
+    <footer class="app-footer">
+      <span>© ORB·OS · PWA 移动浮球挂件</span>
+    </footer>
+  </main>
+
+  <!-- ===== 悬浮浮球 ===== -->
+  <div class="orb-widget" id="orbWidget" role="button" aria-label="浮球挂件">
+    <div class="orb-halo"></div>
+    <div class="orb-core">
+      <div class="orb-spinner"></div>
+      <div class="orb-inner">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+        </svg>
+      </div>
+    </div>
+    <div class="orb-shine"></div>
+  </div>
+
+  <!-- ===== 炫彩应用面板 ===== -->
+  <div class="orb-panel" id="orbPanel" aria-hidden="true">
+    <div class="panel-backdrop"></div>
+    <div class="panel-card">
+      <div class="panel-glow"></div>
+      <div class="panel-particles" id="panelParticles"></div>
+
+      <header class="panel-header">
+        <div class="panel-title">
+          <span class="chip">ORB</span>
+          <h2>炫彩启动中心</h2>
+        </div>
+        <button class="panel-close" id="panelClose" aria-label="关闭">✕</button>
+      </header>
+
+      <div class="panel-hero">
+        <div class="hero-orb">
+          <div class="hero-ring r1"></div>
+          <div class="hero-ring r2"></div>
+          <div class="hero-ring r3"></div>
+          <div class="hero-core">✨</div>
+        </div>
+        <div class="hero-meta">
+          <div class="meta-row">
+            <span class="meta-label">CPU</span>
+            <span class="bar"><em style="width:62%"></em></span>
+            <span class="meta-value">62%</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">MEM</span>
+            <span class="bar"><em style="width:48%"></em></span>
+            <span class="meta-value">48%</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">NET</span>
+            <span class="bar"><em style="width:85%"></em></span>
+            <span class="meta-value">85%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-apps">
+        <button class="app-tile" style="--c1:#ff006e;--c2:#8338ec">
+          <div class="app-ico">🎵</div>
+          <div class="app-label">音乐</div>
+        </button>
+        <button class="app-tile" style="--c1:#00f5d4;--c2:#00bbf9">
+          <div class="app-ico">📸</div>
+          <div class="app-label">相机</div>
+        </button>
+        <button class="app-tile" style="--c1:#fb5607;--c2:#ffbe0b">
+          <div class="app-ico">🌤</div>
+          <div class="app-label">天气</div>
+        </button>
+        <button class="app-tile" style="--c1:#9b5de5;--c2:#f15bb5">
+          <div class="app-ico">💬</div>
+          <div class="app-label">消息</div>
+        </button>
+        <button class="app-tile" style="--c1:#06ffa5;--c2:#3a86ff">
+          <div class="app-ico">🗺</div>
+          <div class="app-label">地图</div>
+        </button>
+        <button class="app-tile" style="--c1:#fee440;--c2:#fb5607">
+          <div class="app-ico">⚙️</div>
+          <div class="app-label">设置</div>
+        </button>
+        <button class="app-tile" style="--c1:#ff006e;--c2:#ffbe0b">
+          <div class="app-ico">🎮</div>
+          <div class="app-label">游戏</div>
+        </button>
+        <button class="app-tile" style="--c1:#8338ec;--c2:#06ffa5">
+          <div class="app-ico">🛒</div>
+          <div class="app-label">商城</div>
+        </button>
+      </div>
+
+      <div class="panel-actions">
+        <button class="act-btn primary" id="confettiBtn">撒花 <span>🎉</span></button>
+        <button class="act-btn ghost" id="hideOrbBtn">隐藏浮球</button>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="sparkCanvas" class="spark-canvas"></canvas>
+
+  <script src="/orb.js" defer></script>
+</body>
+</html>
