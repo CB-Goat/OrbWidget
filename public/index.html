@@ -30,8 +30,71 @@
 
   <title>炫彩浮球挂件 · OrbWidget</title>
   <link rel="stylesheet" href="/styles.css" />
+  <style>
+    /* orb-only 模式：URL 参数 ?mode=orb 或从桌面 PWA 启动时，只显示浮球 */
+    /* 关键：用 CSS 选择器检测 data-mode 属性，不依赖外部 JS 加载 */
+    html[data-orb="1"] body {
+      background: #0a001f !important;
+      overflow: hidden !important;
+    }
+    html[data-orb="1"] .aurora-bg,
+    html[data-orb="1"] .grid-bg,
+    html[data-orb="1"] .app-shell,
+    html[data-orb="1"] .install-card {
+      display: none !important;
+    }
+    html[data-orb="1"] .orb-widget,
+    body[data-mode="orb"] .orb-widget {
+      width: 74px;
+      height: 74px;
+    }
+    html[data-orb="1"] .orb-core,
+    body[data-mode="orb"] .orb-core {
+      width: 74px;
+      height: 74px;
+      box-shadow:
+        0 0 30px rgba(255, 0, 110, 0.7),
+        0 0 60px rgba(131, 56, 236, 0.5),
+        0 0 0 2px rgba(255, 255, 255, 0.15) inset;
+      animation: orbInPulse 1.8s ease-in-out infinite;
+    }
+    html[data-orb="1"] .orb-core::after,
+    body[data-mode="orb"] .orb-core::after {
+      width: 74px;
+      height: 74px;
+    }
+    @keyframes orbInPulse {
+      0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+      50% { transform: scale(1.1); filter: hue-rotate(40deg) brightness(1.15); }
+    }
+  </style>
+  <script>
+    // 立即检测是否进入 orb-only 模式（不等待 DOMContentLoaded）
+    (function() {
+      var url = window.location.href;
+      var isOrb = url.indexOf('mode=orb') > -1
+        || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
+        || (window.navigator && window.navigator.standalone === true);
+      if (isOrb) {
+        document.documentElement.setAttribute('data-orb', '1');
+        // body 还没解析完，先在 html 上做标记，下面脚本再补 body 标记
+      }
+    })();
+  </script>
 </head>
 <body>
+  <script>
+    // body 可用后立即应用标记
+    (function() {
+      var isOrb = window.location.href.indexOf('mode=orb') > -1
+        || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
+        || (window.navigator && window.navigator.standalone === true);
+      if (isOrb) {
+        document.body.setAttribute('data-mode', 'orb');
+        document.body.classList.add('orb-only');
+      }
+    })();
+  </script>
   <div class="aurora-bg"></div>
   <div class="grid-bg"></div>
 
