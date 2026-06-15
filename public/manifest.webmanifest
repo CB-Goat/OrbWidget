@@ -4,7 +4,7 @@
   "description": "一个炫彩的手机浮球挂件 Web App，可悬浮在屏幕边缘，点击展开炫彩应用面板。",
   "start_url": "/?mode=orb",
   "scope": "/",
-  "display": "standalone",
+  "display": "minimal-ui",
   "orientation": "portrait",
   "background_color": "#0a001f",
   "theme_color": "#0a001f",

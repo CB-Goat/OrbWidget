@@ -491,13 +491,25 @@
   if (installBtn) {
     installBtn.addEventListener('click', async () => {
       if (!deferredPrompt) {
-        toast('请点击浏览器菜单 → "添加到主屏幕"');
+        // 如果浏览器没有触发 beforeinstallprompt，尝试手动引导
+        toast('💡 请点击浏览器右上角菜单 → "添加到主屏幕"');
+        // 显示更详细的安装指南
+        if (navigator.standalone !== undefined) {
+          // iOS Safari
+          toast('📱 Safari: 点击底部"分享"按钮 → "添加到主屏幕"');
+        } else if (navigator.userAgent.includes('Chrome')) {
+          toast('🌐 Chrome: 点击三点菜单 → "安装应用"');
+        }
         return;
       }
+      // 触发浏览器原生安装提示
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === 'accepted') {
         if (installCard) installCard.hidden = true;
+        toast('🎉 已安装！从主屏幕打开体验浮球');
+      } else {
+        toast('稍后可以在浏览器菜单再次安装');
       }
       deferredPrompt = null;
     });
