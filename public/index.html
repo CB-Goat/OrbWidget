@@ -31,6 +31,62 @@
   <title>炫彩浮球挂件 · OrbWidget</title>
   <link rel="stylesheet" href="/styles.css" />
   <style>
+    /* PWA 一键安装横幅 */
+    .pwa-install-banner {
+      margin: 16px 20px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #1a003a, #0a001f);
+      border: 1px solid rgba(255, 0, 110, 0.4);
+      box-shadow: 0 8px 32px rgba(131, 56, 236, 0.3), 0 0 0 1px rgba(255,255,255,0.05) inset;
+      overflow: hidden;
+      animation: bannerSlideIn 0.6s cubic-bezier(.2,.8,.2,1);
+    }
+    @keyframes bannerSlideIn {
+      from { opacity: 0; transform: translateY(-16px) scale(.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .install-banner-inner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 18px;
+    }
+    .install-banner-icon {
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+    .install-banner-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .install-banner-text strong {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .install-banner-text span {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+    }
+    .install-banner-btn {
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ff006e, #8338ec, #06ffa5);
+      background-size: 200% 100%;
+      box-shadow: 0 6px 20px rgba(255, 0, 110, 0.5), 0 0 0 1px rgba(255,255,255,.15) inset;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      animation: neonFlow 4s linear infinite;
+      transition: transform .15s;
+    }
+    .install-banner-btn:active { transform: scale(0.95); }
+
     /* orb-only 模式：URL 参数 ?mode=orb 或从桌面 PWA 启动时，只显示浮球 */
     html[data-orb="1"] body {
       background: radial-gradient(circle at 50% 120%, #1a003a 0%, #0a001f 55%, #030014 100%) !important;
@@ -237,6 +293,20 @@
         <div class="feature-icon" data-emoji="◈"></div>
         <h3>可安装为 App</h3>
         <p>PWA 支持，添加到主屏幕，离线可用，像原生 App 启动。</p>
+      </div>
+    </section>
+
+    <!-- 一键安装 PWA 按钮（仅当浏览器支持安装时显示） -->
+    <section class="pwa-install-banner" id="pwaInstallBanner" style="display:none;">
+      <div class="install-banner-inner">
+        <div class="install-banner-icon">🚀</div>
+        <div class="install-banner-text">
+          <strong>一键安装到桌面</strong>
+          <span>独立应用窗口，无需浏览器，像原生 App 一样运行</span>
+        </div>
+        <button class="install-banner-btn" id="pwaInstallBtn">
+          <span>立即安装</span>
+        </button>
       </div>
     </section>
 

@@ -458,21 +458,54 @@
   }
   registerSW();
 
-  // ===== PWA: 自定义安装提示 =====
+  // ===== PWA: 一键安装横幅 & 安装提示 =====
   let deferredPrompt = null;
   let installDismissed = false;
   try { installDismissed = sessionStorage.getItem('orb-install-dismissed') === '1'; } catch (_) {}
 
+  const pwaInstallBanner = document.getElementById('pwaInstallBanner');
+  const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+
+  // 当浏览器触发 beforeinstallprompt 时，显示一键安装横幅
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
+    // 显示醒目的横幅
+    if (pwaInstallBanner) {
+      pwaInstallBanner.style.display = 'block';
+    }
+    // 同时也显示旧的卡片
     if (installCard && !installDismissed) {
       installCard.hidden = false;
     }
   });
 
+  // 一键安装按钮点击
+  if (pwaInstallBtn) {
+    pwaInstallBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) {
+        // 兜底：浏览器不支持时提示手动方式
+        if (navigator.standalone !== undefined) {
+          toast('📱 Safari: 点击下方"分享"按钮 → "添加到主屏幕"');
+        } else {
+          toast('💡 请用 Chrome 浏览器访问，体验一键安装');
+        }
+        return;
+      }
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        toast('🎉 已安装完成！从桌面图标打开体验浮球模式');
+      }
+      deferredPrompt = null;
+      if (pwaInstallBanner) pwaInstallBanner.style.display = 'none';
+    });
+  }
+
+  // 横幅右上角关闭按钮
   window.addEventListener('appinstalled', () => {
     deferredPrompt = null;
+    if (pwaInstallBanner) pwaInstallBanner.style.display = 'none';
     if (installCard) installCard.hidden = true;
     toast('🎉 已安装完成，试试从主屏幕打开');
     if (statusText) statusText.textContent = '已安装';
